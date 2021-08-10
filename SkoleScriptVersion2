@@ -1,0 +1,125 @@
+USE master
+go
+DROP DATABASE SkoleDb2
+go
+CREATE DATABASE SkoleDb2
+go
+USE SkoleDb2
+GO
+
+ALTER DATABASE SkoleDb2
+ADD FILEGROUP PostNrBy;
+go
+	 
+ALTER database SkoleDb2
+ADD FILE
+(
+    NAME= 'PostNrBy',
+    FILENAME = 'D:\H2Sql\Skole2\postNrBy_file.ndf'
+)
+TO FILEGROUP PostNrBy
+go
+
+----------------------------------------
+ALTER DATABASE SkoleDb2
+ADD FILEGROUP Klasse;
+go
+	 
+ALTER database SkoleDb2
+ADD FILE
+(
+    NAME= 'Klasse',
+    FILENAME = 'D:\H2Sql\Skole2\klasse_file.ndf'
+)
+TO FILEGROUP Klasse
+go
+
+----------------------------------------
+ALTER DATABASE SkoleDb2
+ADD FILEGROUP Elev;
+go
+	 
+ALTER database SkoleDb2
+ADD FILE
+(
+    NAME= 'Elev',
+    FILENAME = 'D:\H2Sql\Skole2\elev_file.ndf'
+)
+TO FILEGROUP Elev
+go
+
+----------------------------------------
+ALTER DATABASE SkoleDb2
+ADD FILEGROUP Laere;
+go
+	 
+ALTER database SkoleDb2
+ADD FILE
+(
+    NAME= 'Laere',
+    FILENAME = 'D:\H2Sql\Skole2\laere_file.ndf'
+)
+TO FILEGROUP Laere
+go
+
+----------------------------------------
+ALTER DATABASE SkoleDb2
+ADD FILEGROUP LaereKlasse;
+go
+	 
+ALTER database SkoleDb2
+ADD FILE
+(
+    NAME= 'LaereKlasse',
+    FILENAME = 'D:\H2Sql\Skole2\laereKlasse_file.ndf'
+)
+TO FILEGROUP LaereKlasse
+go
+
+----------------------------------------
+
+Create TABLE PostNrBy 
+(
+PostNr INT PRIMARY KEY NOT NULL,
+Bynavn varchar(30) NOT NULL
+)
+ON [PostNrBy]
+
+CREATE TABLE Klasse
+(
+KlasseId INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+Klassenavn varchar(20) NOT NULL
+)
+ON [Klasse]
+
+CREATE TABLE Elev
+(
+ElevId INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+Fornavn VARCHAR(20) NOT NULL,
+Efternavn VARCHAR(20),
+Addresse VARCHAR(20),
+PostNr INT NOT NULL
+FOREIGN KEY(PostNr) REFERENCES PostNrBy(PostNr)
+)
+ON [Elev]
+
+CREATE TABLE Laere
+(
+LaereId INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+Fornavn VARCHAR(20) NOT NULL,
+Efternavn VARCHAR(20),
+Addresse VARCHAR(30) NOT NULL,
+PostNr INT
+FOREIGN KEY(PostNr) REFERENCES PostNrBy(PostNr)
+)
+ON [Laere]
+
+CREATE TABLE LaereKlasse
+(
+LaereKlasseId INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+LaereId INT NOT NULL,
+KlasseId INT NOT NULL
+FOREIGN KEY(LaereId) REFERENCES Laere(LaereId),
+FOREIGN KEY(KlasseId) REFERENCES Klasse(KlasseId)
+)
+ON [LaereKlasse]
